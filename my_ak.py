@@ -129,7 +129,7 @@ def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 15):
     # 复制参数以避免修改原始参数
     params = base_params.copy()
     # 获取第一页数据，用于确定分页信息
-    r = requests.post(url, data=params, timeout=timeout)
+    r = requests.get(url, params=params, timeout=timeout)
     print(r.text)
     data_json = r.json()
     # 计算分页信息
@@ -293,6 +293,7 @@ import akshare as ak
 if __name__ == "__main__":
     
     # df = stock_zh_a_hist(symbol='000001', start_date='20250418')
+    # df = ak.stock_zh_a_spot_em()
     df = stock_zh_a_spot_em()
     print(df)
     
