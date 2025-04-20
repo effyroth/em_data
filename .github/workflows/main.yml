@@ -1,0 +1,47 @@
+name: Python 自动运行并提交变更
+
+# 可根据需求触发：push 或定时（cron）
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
+
+jobs:
+  update-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取完整仓库，含所有分支与历史
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. 配置 Python 环境
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 4. 运行 Python 脚本
+      - name: Run script
+        run: python my_ak.py
+
+      # 5. 提交并推送更改
+      - name: Commit and Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          # 若无变更则跳过提交
+          git diff --cached --quiet || git commit -m "ci: 自动更新 by GitHub Actions"
+          git push origin HEAD:${{ github.ref_name }}
