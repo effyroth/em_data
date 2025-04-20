@@ -174,7 +174,7 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
     """
     url = "https://82.push2.eastmoney.com/api/qt/clist/get"
     flist = []
-    for i in range(4000):
+    for i in range(700):
         flist.append(f'f{i}')
     x= ','.join(flist)
     params = {
