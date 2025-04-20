@@ -288,9 +288,12 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
     # )
     return temp_df
 
+
+import akshare as ak
 if __name__ == "__main__":
+    
     # df = stock_zh_a_hist(symbol='000001', start_date='20250418')
-    df = stock_zh_a_spot_em()
+    df = ak.stock_zh_a_spot_em()
     print(df)
     
     # 获取今天日期作为文件名
