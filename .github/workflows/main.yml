@@ -1,5 +1,6 @@
 name: Python 自动运行并提交变更
-
+permissions:
+  contents: write
 # 可根据需求触发：push 或定时（cron）
 on:
   push:
