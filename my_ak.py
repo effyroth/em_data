@@ -130,6 +130,7 @@ def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 15):
     params = base_params.copy()
     # 获取第一页数据，用于确定分页信息
     r = requests.post(url, data=params, timeout=timeout)
+    print(r.text)
     data_json = r.json()
     # 计算分页信息
     per_page_num = len(data_json["data"]["diff"])
