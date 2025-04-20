@@ -129,7 +129,7 @@ def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 15):
     # 复制参数以避免修改原始参数
     params = base_params.copy()
     # 获取第一页数据，用于确定分页信息
-    r = requests.get(url, params=params, timeout=timeout)
+    r = requests.post(url, data=params, timeout=timeout)
     print(r.text)
     data_json = r.json()
     # 计算分页信息
@@ -150,25 +150,13 @@ def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 15):
     #     inner_temp_df = pd.DataFrame(data_json["data"]["diff"])
     #     temp_list.append(inner_temp_df)
     
-    import asyncio
-    import aiohttp
-
-    async def fetch_page(session, url, params, page):
+    for page in tqdm(range(2, total_page + 1), leave=False):
         params.update({"pn": page})
-        async with session.post(url, data=params, timeout=15) as response:
-            data = await response.json()
-            return pd.DataFrame(data["data"]["diff"])
-
-    async def fetch_all_pages():
-        async with aiohttp.ClientSession() as session:
-            tasks = [fetch_page(session, url, params, page) for page in range(1, total_page + 1)]
-            for future in tqdm(asyncio.as_completed(tasks), total=total_page, leave=False):
-                inner_temp_df = await future
-                temp_list.append(inner_temp_df)
-
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(fetch_all_pages())
+        r = requests.post(url, data=params, timeout=timeout)
+        data_json = r.json()
+        inner_temp_df = pd.DataFrame(data_json["data"]["diff"])
+        temp_list.append(inner_temp_df)
+    #
     # 合并所有数据
     temp_df = pd.concat(temp_list, ignore_index=True)
     temp_df["f3"] = pd.to_numeric(temp_df["f3"], errors="coerce")
@@ -186,7 +174,7 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
     """
     url = "https://82.push2.eastmoney.com/api/qt/clist/get"
     flist = []
-    for i in range(200):
+    for i in range(4000):
         flist.append(f'f{i}')
     x= ','.join(flist)
     params = {
@@ -203,7 +191,7 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
         # "fields": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,"
         # "f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152",
     }
-    from akshare.utils.func import fetch_paginated_data
+    # from akshare.utils.func import fetch_paginated_data
     temp_df = fetch_paginated_data(url, params)
     # temp_df.columns = [
     #     "index",
