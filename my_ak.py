@@ -113,7 +113,7 @@ import pandas as pd
 import requests
 
 from akshare.utils.tqdm import get_tqdm
-def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 15):
+def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 150):
     """
     东方财富-分页获取数据并合并结果
     https://quote.eastmoney.com/f1.html?newcode=0.000001
