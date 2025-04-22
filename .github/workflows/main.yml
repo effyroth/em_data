@@ -3,8 +3,8 @@ permissions:
   contents: write
 # 可根据需求触发：push 或定时（cron）
 on:
-  push:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
   schedule:
     - cron: '0 9 * * *'  # 每天 UTC 00:00 运行
 
