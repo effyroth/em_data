@@ -3,6 +3,7 @@ permissions:
   contents: write
 # 可根据需求触发：push 或定时（cron）
 on:
+  workflow_dispatch:
   # push:
   #   branches: [ main ]
   schedule:
