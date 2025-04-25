@@ -151,7 +151,7 @@ def fetch_paginated_data(url: str, base_params: Dict, timeout: int = 150):
             return pd.DataFrame(data["data"]["diff"])
 
     async def fetch_all_pages():
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=10)) as session:
             tasks = [fetch_page(session, url, params, page) for page in range(1, total_page + 1)]
             for future in tqdm(asyncio.as_completed(tasks), total=total_page, leave=False):
                 inner_temp_df = await future
