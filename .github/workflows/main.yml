@@ -11,7 +11,7 @@ on:
 
 jobs:
   update-and-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       # 1. 拉取完整仓库，含所有分支与历史
