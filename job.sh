@@ -1,4 +1,5 @@
 git pull
+source .venv/bin/activate
 python -V
 pip -V
 python -m pip install -r requirements.txt
