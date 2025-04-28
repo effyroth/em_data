@@ -4,6 +4,7 @@ source .venv/bin/activate
 python -V
 pip -V
 pip install -r requirements.txt
+proxyoff
 python my_ak.py
 git add .
 git commit -m "更新代码"
